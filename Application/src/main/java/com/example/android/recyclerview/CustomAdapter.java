@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.android.recyclerview;
 
 import com.example.android.common.logger.Log;
@@ -39,6 +23,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textViewTitle;
+        private final TextView textViewDescription;
+        private final TextView textViewLink;
+        private final TextView textViewAuthor;
+        private final TextView textViewPubDate;
+        private final TextView textViewCategory;
 
         public ViewHolder(View v) {
             super(v);
@@ -50,10 +39,35 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 }
             });
             textViewTitle = (TextView) v.findViewById(R.id.textViewTitle);
+            textViewDescription = (TextView) v.findViewById(R.id.textViewDescription);
+            textViewLink = (TextView) v.findViewById(R.id.textViewLink);
+            textViewAuthor = (TextView) v.findViewById(R.id.textViewAuthor);
+            textViewPubDate = (TextView) v.findViewById(R.id.textViewPubDate);
+            textViewCategory = (TextView) v.findViewById(R.id.textViewCategory);
         }
 
-        public TextView getTextView() {
+        public TextView getTextViewTitle() {
             return textViewTitle;
+        }
+
+        public TextView getTextViewDescription() {
+            return textViewDescription;
+        }
+
+        public TextView getTextViewLink() {
+            return textViewLink;
+        }
+
+        public TextView getTextViewAuthor() {
+            return textViewAuthor;
+        }
+
+        public TextView getTextViewPubDate() {
+            return textViewPubDate;
+        }
+
+        public TextView getTextViewCategory() {
+            return textViewCategory;
         }
     }
     // END_INCLUDE(recyclerViewSampleViewHolder)
@@ -87,7 +101,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
-        viewHolder.getTextView().setText(mDataSet[position]);
+        viewHolder.getTextViewTitle().setText(mDataSet[position]);
+
+        // Uncomment below to dynamically update rss feed entry row
+//        viewHolder.getTextViewDescription().setText(mDataSet[position]);
+//        viewHolder.getTextViewLink().setText(mDataSet[position]);
+//        viewHolder.getTextViewAuthor().setText(mDataSet[position]);
+//        viewHolder.getTextViewPubDate().setText(mDataSet[position]);
+//        viewHolder.getTextViewCategory().setText(mDataSet[position]);
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
 
