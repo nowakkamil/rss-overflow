@@ -38,7 +38,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
+        private final TextView textViewTitle;
 
         public ViewHolder(View v) {
             super(v);
@@ -49,11 +49,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
                 }
             });
-            textView = (TextView) v.findViewById(R.id.textView);
+            textViewTitle = (TextView) v.findViewById(R.id.textViewTitle);
         }
 
         public TextView getTextView() {
-            return textView;
+            return textViewTitle;
         }
     }
     // END_INCLUDE(recyclerViewSampleViewHolder)
