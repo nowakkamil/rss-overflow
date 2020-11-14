@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="element_text">Element</string>
+    <string name="description_text">Description</string>
+    <string name="link_text">Link</string>
+    <string name="author_text">Author</string>
+    <string name="publication_text">Publication Date</string>
+    <string name="category_text">Category</string>
+</resources>
