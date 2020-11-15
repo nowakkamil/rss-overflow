@@ -1,12 +1,25 @@
 package com.example.android.recyclerview;
 
-import com.example.android.common.logger.Log;
-
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.android.common.converters.LocalDateTimeConverter;
+import com.example.android.common.logger.Log;
+import com.example.android.common.models.Entry;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Date;
+import java.util.List;
+
+import lombok.Getter;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -14,20 +27,27 @@ import android.widget.TextView;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
-    private String[] mDataSet;
+    private List<Entry> mDataSet;
 
-    // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
+    public void setEntries(List<Entry> newEntries) {
+        if (mDataSet == null) {
+            mDataSet = newEntries;
+        } else {
+            mDataSet.clear();
+            mDataSet.addAll(newEntries);
+        }
+    }
 
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
+    @Getter
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textViewTitle;
-        private final TextView textViewDescription;
-        private final TextView textViewLink;
         private final TextView textViewAuthor;
-        private final TextView textViewPubDate;
-        private final TextView textViewCategory;
+        private final TextView textViewPublished;
+        private final TextView textViewUpdated;
+        private final TextView textViewSummary;
 
         public ViewHolder(View v) {
             super(v);
@@ -39,50 +59,25 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 }
             });
             textViewTitle = (TextView) v.findViewById(R.id.textViewTitle);
-            textViewDescription = (TextView) v.findViewById(R.id.textViewDescription);
-            textViewLink = (TextView) v.findViewById(R.id.textViewLink);
             textViewAuthor = (TextView) v.findViewById(R.id.textViewAuthor);
-            textViewPubDate = (TextView) v.findViewById(R.id.textViewPubDate);
-            textViewCategory = (TextView) v.findViewById(R.id.textViewCategory);
-        }
-
-        public TextView getTextViewTitle() {
-            return textViewTitle;
-        }
-
-        public TextView getTextViewDescription() {
-            return textViewDescription;
-        }
-
-        public TextView getTextViewLink() {
-            return textViewLink;
-        }
-
-        public TextView getTextViewAuthor() {
-            return textViewAuthor;
-        }
-
-        public TextView getTextViewPubDate() {
-            return textViewPubDate;
-        }
-
-        public TextView getTextViewCategory() {
-            return textViewCategory;
+            textViewPublished = (TextView) v.findViewById(R.id.textViewPublished);
+            textViewUpdated = (TextView) v.findViewById(R.id.textViewUpdated);
+            textViewSummary = (TextView) v.findViewById(R.id.textViewSummary);
         }
     }
-    // END_INCLUDE(recyclerViewSampleViewHolder)
 
     /**
      * Initialize the dataset of the Adapter.
      *
-     * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
+     * @param dataSet List<Entry> containing the data to populate views to be used by RecyclerView.
      */
-    public CustomAdapter(String[] dataSet) {
+    public CustomAdapter(List<Entry> dataSet) {
         mDataSet = dataSet;
     }
 
-    // BEGIN_INCLUDE(recyclerViewOnCreateViewHolder)
-    // Create new views (invoked by the layout manager)
+    /**
+     * Create new views (invoked by the layout manager)
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view.
@@ -91,30 +86,57 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         return new ViewHolder(v);
     }
-    // END_INCLUDE(recyclerViewOnCreateViewHolder)
 
-    // BEGIN_INCLUDE(recyclerViewOnBindViewHolder)
-    // Replace the contents of a view (invoked by the layout manager)
+    /**
+     * Replace the contents of a view (invoked by the layout manager).
+     * Get element from dataset at this position and replace the contents of the view
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         Log.d(TAG, "Element " + position + " set.");
 
-        // Get element from your dataset at this position and replace the contents of the view
-        // with that element
-        viewHolder.getTextViewTitle().setText(mDataSet[position]);
+        // Title
+        viewHolder.getTextViewTitle().setText(mDataSet.get(position).getTitle());
 
-        // Uncomment below to dynamically update rss feed entry row
-//        viewHolder.getTextViewDescription().setText(mDataSet[position]);
-//        viewHolder.getTextViewLink().setText(mDataSet[position]);
-//        viewHolder.getTextViewAuthor().setText(mDataSet[position]);
-//        viewHolder.getTextViewPubDate().setText(mDataSet[position]);
-//        viewHolder.getTextViewCategory().setText(mDataSet[position]);
+        // Author
+        viewHolder.getTextViewAuthor().setText("Author: " + mDataSet.get(position).getAuthor());
+
+        // Published Date
+        Date publishedDate = mDataSet.get(position).getPublished();
+        if (publishedDate != null) {
+            LocalDateTime publishedLocalDate = LocalDateTimeConverter
+                    .convertToLocalDateTimeViaInstant(publishedDate);
+            viewHolder.getTextViewPublished().setText("Published: " +
+                    DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(publishedLocalDate));
+        }
+
+        // Updated Date
+        Date updatedDate = mDataSet.get(position).getUpdated();
+        if (updatedDate != null) {
+            LocalDateTime updatedLocalDate = LocalDateTimeConverter
+                    .convertToLocalDateTimeViaInstant(updatedDate);
+            viewHolder.getTextViewUpdated().setText("Updated: " +
+                    DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(updatedLocalDate));
+        }
+
+        // Summary
+        String summary = mDataSet.get(position).getSummary();
+        if (summary != null)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                viewHolder.getTextViewSummary().setText(
+                        Html.fromHtml(summary, Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                viewHolder.getTextViewSummary().setText(
+                        Html.fromHtml(summary));
+            }
     }
-    // END_INCLUDE(recyclerViewOnBindViewHolder)
 
-    // Return the size of your dataset (invoked by the layout manager)
+    /**
+     * Return the size of your dataset (invoked by the layout manager)
+     */
     @Override
     public int getItemCount() {
-        return mDataSet.length;
+        return mDataSet.size();
     }
 }

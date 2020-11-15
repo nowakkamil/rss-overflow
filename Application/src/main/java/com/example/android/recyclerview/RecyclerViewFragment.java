@@ -1,8 +1,6 @@
 package com.example.android.recyclerview;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,14 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.common.logger.Log;
-import com.example.android.common.models.Feed;
-import com.example.android.services.StackOverflowClient;
+import com.example.android.common.models.Entry;
 
-import rx.Observer;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Demonstrates the use of {@link RecyclerView} with a {@link LinearLayoutManager} and a
@@ -27,14 +23,16 @@ import rx.schedulers.Schedulers;
 public class RecyclerViewFragment extends Fragment {
 
     private static final String TAG = "RecyclerViewFragment";
-    private static final int DATASET_COUNT = 60;
+    private static final int DATASET_COUNT = 30;
 
     protected RecyclerView mRecyclerView;
     protected CustomAdapter mAdapter;
-    protected RecyclerView.LayoutManager mLayoutManager;
-    protected String[] mDataset;
+    protected List<Entry> mDataset;
 
-    protected Subscription mSubscription;
+    public void updateEntries(List<Entry> newEntries) {
+        mAdapter.setEntries(newEntries);
+        mAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,11 +53,6 @@ public class RecyclerViewFragment extends Fragment {
 
         // BEGIN_INCLUDE(initializeRecyclerView)
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-
-        // LinearLayoutManager is used here, this will layout the elements in a similar fashion
-        // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
-        // elements are laid out.
-        mLayoutManager = new LinearLayoutManager(getActivity());
 
         setRecyclerViewLayoutManager();
 
@@ -83,9 +76,7 @@ public class RecyclerViewFragment extends Fragment {
                     .findFirstCompletelyVisibleItemPosition();
         }
 
-        mLayoutManager = new LinearLayoutManager(getActivity());
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.scrollToPosition(scrollPosition);
     }
 
@@ -94,37 +85,11 @@ public class RecyclerViewFragment extends Fragment {
      * from a local content provider or remote server.
      */
     private void initDataset() {
-        mSubscription = StackOverflowClient.getInstance()
-                .getFeed()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Feed>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "In onCompleted()");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        Log.d(TAG, "In onError()");
-                    }
-
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onNext(Feed feed) {
-                        Log.i(TAG, "feed title: " + feed.getTitle());
-                        Log.i(TAG, "feed updated: " + feed.getUpdated());
-
-                        feed.getEntries().forEach(System.out::println);
-
-                        Log.d(TAG, "In onNext()");
-                    }
-                });
-
-        mDataset = new String[DATASET_COUNT];
+        mDataset = new ArrayList<>();
         for (int i = 0; i < DATASET_COUNT; i++) {
-            mDataset[i] = "This is element #" + i;
+            Entry entry = new Entry();
+            entry.setTitle(RandomStringUtils.random(10, true, false));
+            mDataset.add(entry);
         }
     }
 }
