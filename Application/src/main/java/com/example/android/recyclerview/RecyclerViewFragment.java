@@ -1,6 +1,8 @@
 package com.example.android.recyclerview;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -108,10 +110,13 @@ public class RecyclerViewFragment extends Fragment {
                         Log.d(TAG, "In onError()");
                     }
 
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onNext(Feed feed) {
                         Log.i(TAG, "feed title: " + feed.getTitle());
                         Log.i(TAG, "feed updated: " + feed.getUpdated());
+
+                        feed.getEntries().forEach(System.out::println);
 
                         Log.d(TAG, "In onNext()");
                     }
