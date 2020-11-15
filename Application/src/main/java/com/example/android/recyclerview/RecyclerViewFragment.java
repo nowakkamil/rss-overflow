@@ -9,6 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.android.common.logger.Log;
+import com.example.android.common.models.Feed;
+import com.example.android.services.StackOverflowClient;
+
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Demonstrates the use of {@link RecyclerView} with a {@link LinearLayoutManager} and a
  * {@link GridLayoutManager}.
@@ -22,6 +31,8 @@ public class RecyclerViewFragment extends Fragment {
     protected CustomAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected String[] mDataset;
+
+    protected Subscription mSubscription;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +92,31 @@ public class RecyclerViewFragment extends Fragment {
      * from a local content provider or remote server.
      */
     private void initDataset() {
+        mSubscription = StackOverflowClient.getInstance()
+                .getFeed()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Feed>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "In onCompleted()");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        Log.d(TAG, "In onError()");
+                    }
+
+                    @Override
+                    public void onNext(Feed feed) {
+                        Log.i(TAG, "feed title: " + feed.getTitle());
+                        Log.i(TAG, "feed updated: " + feed.getUpdated());
+
+                        Log.d(TAG, "In onNext()");
+                    }
+                });
+
         mDataset = new String[DATASET_COUNT];
         for (int i = 0; i < DATASET_COUNT; i++) {
             mDataset[i] = "This is element #" + i;
