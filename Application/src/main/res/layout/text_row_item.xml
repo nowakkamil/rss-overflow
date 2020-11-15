@@ -16,6 +16,7 @@
             android:layout_weight="1"
             android:clickable="false"
             android:text="@string/element_text"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_size_title"
             android:textStyle="bold" />
     </TableRow>
