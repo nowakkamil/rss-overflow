@@ -1,8 +1,10 @@
 package com.example.android.common.models;
 
-import com.tickaroo.tikxml.annotation.Path;
+import com.tickaroo.tikxml.annotation.Element;
 import com.tickaroo.tikxml.annotation.PropertyElement;
 import com.tickaroo.tikxml.annotation.Xml;
+
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,21 +14,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Xml
-public class Entry {
+public class Feed {
 
     @PropertyElement
     String title;
 
-    @Path("author")
-    @PropertyElement(name = "name")
-    String author;
-
     @PropertyElement
-    String published;
+    String subtitle;
 
     @PropertyElement
     String updated;
 
-    @PropertyElement
-    String summary;
+    @Element
+    List<Entry> entries;
 }
