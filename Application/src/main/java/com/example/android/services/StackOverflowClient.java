@@ -4,9 +4,9 @@ import com.example.android.common.models.Feed;
 import com.tickaroo.tikxml.TikXml;
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory;
 
+import io.reactivex.Observable;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import rx.Observable;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public class StackOverflowClient {
     private static final String STACK_OVERFLOW_BASE_URL = "https://stackoverflow.com";
@@ -18,7 +18,7 @@ public class StackOverflowClient {
         final TikXml tikXml = new TikXml.Builder().exceptionOnUnreadXml(false).build();
 
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(STACK_OVERFLOW_BASE_URL)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(TikXmlConverterFactory.create(tikXml))
                 .build();
 
