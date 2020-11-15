@@ -5,6 +5,6 @@
     <string name="description_text">Description</string>
     <string name="link_text">Link</string>
     <string name="author_text">Author</string>
-    <string name="publication_text">Publication Date</string>
+    <string name="publication_date_text">Publication Date</string>
     <string name="category_text">Category</string>
 </resources>

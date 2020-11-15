@@ -3,6 +3,9 @@ package com.example.android.common.models;
 import com.tickaroo.tikxml.annotation.Path;
 import com.tickaroo.tikxml.annotation.PropertyElement;
 import com.tickaroo.tikxml.annotation.Xml;
+import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter;
+
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Xml
 public class Entry {
 
-    @PropertyElement
+    @PropertyElement(converter = HtmlEscapeStringConverter.class)
     String title;
 
     @Path("author")
@@ -22,11 +25,11 @@ public class Entry {
     String author;
 
     @PropertyElement
-    String published;
+    Date published;
 
     @PropertyElement
-    String updated;
+    Date updated;
 
-    @PropertyElement
+    @PropertyElement(converter = HtmlEscapeStringConverter.class)
     String summary;
 }

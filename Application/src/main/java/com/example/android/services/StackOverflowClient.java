@@ -1,8 +1,12 @@
 package com.example.android.services;
 
+import com.example.android.common.converters.DateConverter;
 import com.example.android.common.models.Feed;
 import com.tickaroo.tikxml.TikXml;
+import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter;
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory;
+
+import java.util.Date;
 
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
@@ -15,7 +19,11 @@ public class StackOverflowClient {
     private StackOverflowService stackOverflowService;
 
     private StackOverflowClient() {
-        final TikXml tikXml = new TikXml.Builder().exceptionOnUnreadXml(false).build();
+        final TikXml tikXml = new TikXml.Builder()
+                .exceptionOnUnreadXml(false)
+                .addTypeConverter(Date.class, new DateConverter())
+                .addTypeConverter(String.class, new HtmlEscapeStringConverter())
+                .build();
 
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(STACK_OVERFLOW_BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
