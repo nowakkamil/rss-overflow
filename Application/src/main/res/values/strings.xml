@@ -7,4 +7,6 @@
     <string name="author_text">Author</string>
     <string name="publication_date_text">Publication Date</string>
     <string name="category_text">Category</string>
+    <string name="search_text">Search</string>
+    <string name="search_hint_text">Enter tag</string>
 </resources>
