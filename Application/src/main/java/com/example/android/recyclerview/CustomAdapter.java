@@ -107,7 +107,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         if (publishedDate != null) {
             LocalDateTime publishedLocalDate = LocalDateTimeConverter
                     .convertToLocalDateTimeViaInstant(publishedDate);
-            viewHolder.getTextViewPublished().setText("Published: " +
+            viewHolder.getTextViewPublished().setText("PUB: " +
                     DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(publishedLocalDate));
         }
 
@@ -116,7 +116,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         if (updatedDate != null) {
             LocalDateTime updatedLocalDate = LocalDateTimeConverter
                     .convertToLocalDateTimeViaInstant(updatedDate);
-            viewHolder.getTextViewUpdated().setText("Updated: " +
+            viewHolder.getTextViewUpdated().setText("U: " +
                     DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(updatedLocalDate));
         }
 

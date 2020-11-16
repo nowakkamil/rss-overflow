@@ -48,10 +48,10 @@ public class RecyclerViewFragment extends Fragment {
             LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.recycler_view_frag, container, false);
         rootView.setTag(TAG);
 
-        // BEGIN_INCLUDE(initializeRecyclerView)
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
 
         setRecyclerViewLayoutManager();
@@ -59,7 +59,6 @@ public class RecyclerViewFragment extends Fragment {
         mAdapter = new CustomAdapter(mDataset);
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
-        // END_INCLUDE(initializeRecyclerView)
 
         return rootView;
     }

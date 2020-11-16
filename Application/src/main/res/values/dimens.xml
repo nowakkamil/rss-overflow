@@ -3,4 +3,5 @@
 <resources>
     <dimen name="list_item_height">192dp</dimen>
     <dimen name="text_size_title">16dp</dimen>
+    <dimen name="text_size_dates">12dp</dimen>
 </resources>

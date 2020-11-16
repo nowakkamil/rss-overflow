@@ -3,4 +3,5 @@
 <resources>
     <color name="colorPrimary">#F48024</color>
     <color name="colorPrimaryDark">#242729</color>
+    <color name="colorBlack">#000000</color>
 </resources>
