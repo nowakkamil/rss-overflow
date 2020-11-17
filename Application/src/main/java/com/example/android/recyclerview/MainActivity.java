@@ -1,10 +1,20 @@
 package com.example.android.recyclerview;
 
+import android.content.Context;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.android.common.activities.SampleActivityBase;
 import com.example.android.common.logger.Log;
@@ -30,6 +40,27 @@ public class MainActivity extends SampleActivityBase {
 
     private RecyclerViewFragment mFragment;
 
+    /**
+     * Clear focus on touch outside of EditText
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+
+        return super.dispatchTouchEvent(event);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,22 +73,56 @@ public class MainActivity extends SampleActivityBase {
             transaction.commit();
         }
 
-        createObservable();
+        final EditText editTag = (EditText) findViewById(R.id.edit_tag);
+        final Button buttonSearch = (Button) findViewById(R.id.button_search);
+        buttonSearch.setOnClickListener(v -> searchTag(editTag));
+
+        editTag.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                searchTag(editTag);
+                return true;
+            }
+
+            return false;
+        });
     }
 
-    private void createObservable() {
+    public void createInitialObservable() {
         StackOverflowClient.getInstance()
                 .getFeed()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getDisposableObserver());
+                .subscribe(getObserver());
+    }
+
+    private void createObservable(String tag) {
+        StackOverflowClient.getInstance()
+                .getTag(tag)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getObserver());
+    }
+
+    private void searchTag(EditText editTag) {
+        final String tag = editTag.getText().toString();
+        if (TextUtils.isEmpty(tag)) {
+            return;
+        }
+
+        createObservable(tag);
+        hideKeyboard(editTag);
+    }
+
+    private void hideKeyboard(EditText editTag) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editTag.getWindowToken(), 0);
     }
 
     /**
      * Observer
      * Handles the stream of data
      */
-    private Observer<Feed> getDisposableObserver() {
+    private Observer<Feed> getObserver() {
         return new Observer<Feed>() {
             @Override
             public void onComplete() {
@@ -66,6 +131,8 @@ public class MainActivity extends SampleActivityBase {
 
             @Override
             public void onError(Throwable e) {
+                Toast.makeText(getApplicationContext(), "Not found", Toast.LENGTH_LONG).show();
+
                 e.printStackTrace();
                 Log.d(TAG, "In onError()");
             }
@@ -79,12 +146,18 @@ public class MainActivity extends SampleActivityBase {
             public void onNext(Feed feed) {
                 Log.d(TAG, "In onNext()");
 
+                mFragment.scrollToTop();
+
+                Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
+
                 Log.i(TAG, "feed title: " + feed.getTitle());
                 Log.i(TAG, "feed updated: " + feed.getUpdated());
 
                 List<Entry> entries = feed.getEntries();
+                if (entries == null) {
+                    return;
+                }
                 entries.forEach(System.out::println);
-
                 mFragment.updateEntries(entries);
             }
         };

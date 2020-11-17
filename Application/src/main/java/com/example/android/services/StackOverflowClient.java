@@ -44,4 +44,8 @@ public class StackOverflowClient {
     public Observable<Feed> getFeed() {
         return stackOverflowService.getFeed();
     }
+
+    public Observable<Feed> getTag(String tag) {
+        return stackOverflowService.getTag(tag);
+    }
 }

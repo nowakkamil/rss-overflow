@@ -11,9 +11,6 @@ import android.view.ViewGroup;
 
 import com.example.android.common.models.Entry;
 
-import org.apache.commons.lang3.RandomStringUtils;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,10 +20,10 @@ import java.util.List;
 public class RecyclerViewFragment extends Fragment {
 
     private static final String TAG = "RecyclerViewFragment";
-    private static final int DATASET_COUNT = 30;
 
     protected RecyclerView mRecyclerView;
     protected CustomAdapter mAdapter;
+    protected LinearLayoutManager mLinearLayoutManager;
     protected List<Entry> mDataset;
 
     public void updateEntries(List<Entry> newEntries) {
@@ -34,13 +31,14 @@ public class RecyclerViewFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
     }
 
+    public void scrollToTop() {
+        mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialize dataset, this data would usually come from a local content provider or
-        // remote server.
-        initDataset();
+        ((MainActivity) getActivity()).createInitialObservable();
     }
 
     @Override
@@ -75,20 +73,8 @@ public class RecyclerViewFragment extends Fragment {
                     .findFirstCompletelyVisibleItemPosition();
         }
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.scrollToPosition(scrollPosition);
-    }
-
-    /**
-     * Generates Strings for RecyclerView's adapter. This data would usually come
-     * from a local content provider or remote server.
-     */
-    private void initDataset() {
-        mDataset = new ArrayList<>();
-        for (int i = 0; i < DATASET_COUNT; i++) {
-            Entry entry = new Entry();
-            entry.setTitle(RandomStringUtils.random(10, true, false));
-            mDataset.add(entry);
-        }
     }
 }

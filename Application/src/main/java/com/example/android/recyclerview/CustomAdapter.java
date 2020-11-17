@@ -13,6 +13,8 @@ import com.example.android.common.converters.LocalDateTimeConverter;
 import com.example.android.common.logger.Log;
 import com.example.android.common.models.Entry;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -121,7 +123,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         }
 
         // Summary
-        String summary = mDataSet.get(position).getSummary();
+        String summary = StringUtils.stripToEmpty(mDataSet.get(position).getSummary());
         if (summary != null)
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 viewHolder.getTextViewSummary().setText(
@@ -137,6 +139,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      */
     @Override
     public int getItemCount() {
+        if (mDataSet == null) {
+            return 0;
+        }
+
         return mDataSet.size();
     }
 }
