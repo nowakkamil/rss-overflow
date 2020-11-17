@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sample_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,16 +18,22 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/edit_text_username"
+            android:id="@+id/edit_tag"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
             android:layout_marginLeft="@dimen/margin_small"
             android:layout_weight="1"
             android:autofillHints="android"
             android:backgroundTint="@color/colorPrimaryDark"
+            android:digits="abcdefghijklmnopqrstuvwxyz1234567890+#-. "
             android:hint="@string/search_hint_text"
+            android:imeOptions="actionSearch"
             android:inputType="text"
-            android:textColor="@color/colorWhite" />
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/colorPrimaryDark"
+            tools:targetApi="lollipop" />
 
         <Button
             android:id="@+id/button_search"
@@ -34,6 +41,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorPrimaryDark"
             android:text="@string/search_text"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/colorWhite"
+            tools:targetApi="lollipop" />
     </LinearLayout>
 </LinearLayout>
