@@ -96,19 +96,27 @@ public class MainActivity extends SampleActivityBase {
                 .subscribe(getObserver());
     }
 
-    private void searchTag(EditText editTag) {
-        final String tag = editTag.getText().toString();
-        if (!TextUtils.isEmpty(tag)) {
-            createObservable(tag);
-        }
-    }
-
     private void createObservable(String tag) {
         StackOverflowClient.getInstance()
                 .getTag(tag)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getObserver());
+    }
+
+    private void searchTag(EditText editTag) {
+        final String tag = editTag.getText().toString();
+        if (TextUtils.isEmpty(tag)) {
+            return;
+        }
+
+        createObservable(tag);
+        hideKeyboard(editTag);
+    }
+
+    private void hideKeyboard(EditText editTag) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editTag.getWindowToken(), 0);
     }
 
     /**
