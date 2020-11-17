@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.android.common.activities.SampleActivityBase;
 import com.example.android.common.logger.Log;
@@ -132,6 +133,8 @@ public class MainActivity extends SampleActivityBase {
 
             @Override
             public void onError(Throwable e) {
+                Toast.makeText(getApplicationContext(), "Not found", Toast.LENGTH_LONG).show();
+
                 e.printStackTrace();
                 Log.d(TAG, "In onError()");
             }
@@ -145,12 +148,16 @@ public class MainActivity extends SampleActivityBase {
             public void onNext(Feed feed) {
                 Log.d(TAG, "In onNext()");
 
+                Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
+
                 Log.i(TAG, "feed title: " + feed.getTitle());
                 Log.i(TAG, "feed updated: " + feed.getUpdated());
 
                 List<Entry> entries = feed.getEntries();
+                if (entries == null) {
+                    return;
+                }
                 entries.forEach(System.out::println);
-
                 mFragment.updateEntries(entries);
             }
         };
