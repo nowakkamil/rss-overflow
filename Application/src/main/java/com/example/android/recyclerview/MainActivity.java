@@ -146,6 +146,8 @@ public class MainActivity extends SampleActivityBase {
             public void onNext(Feed feed) {
                 Log.d(TAG, "In onNext()");
 
+                mFragment.scrollToTop();
+
                 Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
 
                 Log.i(TAG, "feed title: " + feed.getTitle());

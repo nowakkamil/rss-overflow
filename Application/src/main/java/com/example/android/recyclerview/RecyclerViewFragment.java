@@ -23,11 +23,16 @@ public class RecyclerViewFragment extends Fragment {
 
     protected RecyclerView mRecyclerView;
     protected CustomAdapter mAdapter;
+    protected LinearLayoutManager mLinearLayoutManager;
     protected List<Entry> mDataset;
 
     public void updateEntries(List<Entry> newEntries) {
         mAdapter.setEntries(newEntries);
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void scrollToTop() {
+        mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
     }
 
     @Override
@@ -68,7 +73,8 @@ public class RecyclerViewFragment extends Fragment {
                     .findFirstCompletelyVisibleItemPosition();
         }
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.scrollToPosition(scrollPosition);
     }
 }
