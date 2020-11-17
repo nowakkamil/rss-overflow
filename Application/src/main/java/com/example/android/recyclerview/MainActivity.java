@@ -73,8 +73,6 @@ public class MainActivity extends SampleActivityBase {
             transaction.commit();
         }
 
-        createInitialObservable();
-
         final EditText editTag = (EditText) findViewById(R.id.edit_tag);
         final Button buttonSearch = (Button) findViewById(R.id.button_search);
         buttonSearch.setOnClickListener(v -> searchTag(editTag));
@@ -89,7 +87,7 @@ public class MainActivity extends SampleActivityBase {
         });
     }
 
-    private void createInitialObservable() {
+    public void createInitialObservable() {
         StackOverflowClient.getInstance()
                 .getFeed()
                 .subscribeOn(Schedulers.io())

@@ -139,6 +139,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      */
     @Override
     public int getItemCount() {
+        if (mDataSet == null) {
+            return 0;
+        }
+
         return mDataSet.size();
     }
 }
