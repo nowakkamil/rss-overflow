@@ -1,4 +1,4 @@
-package com.example.android.recyclerview;
+package com.rssoverflow;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -16,13 +16,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.android.common.activities.SampleActivityBase;
-import com.example.android.common.logger.Log;
-import com.example.android.common.logger.LogWrapper;
-import com.example.android.common.logger.MessageOnlyLogFilter;
-import com.example.android.common.models.Entry;
-import com.example.android.common.models.Feed;
-import com.example.android.services.StackOverflowClient;
+import com.rssoverflow.common.activities.SampleActivityBase;
+import com.rssoverflow.common.logger.Log;
+import com.rssoverflow.common.logger.LogWrapper;
+import com.rssoverflow.common.logger.MessageOnlyLogFilter;
+import com.rssoverflow.common.models.Entry;
+import com.rssoverflow.common.models.Feed;
+import com.rssoverflow.recyclerview.R;
+import com.rssoverflow.recyclerview.RecyclerViewFragment;
+import com.rssoverflow.services.StackOverflowClient;
 
 import java.util.List;
 
@@ -131,10 +133,10 @@ public class MainActivity extends SampleActivityBase {
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(getApplicationContext(), "Not found", Toast.LENGTH_LONG).show();
-
-                e.printStackTrace();
                 Log.d(TAG, "In onError()");
+                e.printStackTrace();
+
+                Toast.makeText(getApplicationContext(), "Not found", Toast.LENGTH_LONG).show();
             }
 
             @Override

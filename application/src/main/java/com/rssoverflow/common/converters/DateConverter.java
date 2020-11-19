@@ -1,4 +1,4 @@
-package com.example.android.common.converters;
+package com.rssoverflow.common.converters;
 
 import com.tickaroo.tikxml.TypeConverter;
 

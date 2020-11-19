@@ -1,4 +1,4 @@
-package com.example.android.common.models;
+package com.rssoverflow.common.models;
 
 import com.tickaroo.tikxml.annotation.Path;
 import com.tickaroo.tikxml.annotation.PropertyElement;

@@ -1,6 +1,6 @@
-package com.example.android.services;
+package com.rssoverflow.services;
 
-import com.example.android.common.models.Feed;
+import com.rssoverflow.common.models.Feed;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

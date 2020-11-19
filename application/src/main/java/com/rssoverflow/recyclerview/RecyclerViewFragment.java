@@ -1,4 +1,4 @@
-package com.example.android.recyclerview;
+package com.rssoverflow.recyclerview;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,9 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.common.models.Entry;
+import com.rssoverflow.RecyclerAdapter;
+import com.rssoverflow.MainActivity;
+import com.rssoverflow.common.models.Entry;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Demonstrates the use of {@link RecyclerView} with a {@link LinearLayoutManager} and a
@@ -22,9 +25,8 @@ public class RecyclerViewFragment extends Fragment {
     private static final String TAG = "RecyclerViewFragment";
 
     protected RecyclerView mRecyclerView;
-    protected CustomAdapter mAdapter;
+    protected RecyclerAdapter mAdapter;
     protected LinearLayoutManager mLinearLayoutManager;
-    protected List<Entry> mDataset;
 
     public void updateEntries(List<Entry> newEntries) {
         mAdapter.setEntries(newEntries);
@@ -38,7 +40,7 @@ public class RecyclerViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((MainActivity) getActivity()).createInitialObservable();
+        ((MainActivity) Objects.requireNonNull(getActivity())).createInitialObservable();
     }
 
     @Override
@@ -54,8 +56,8 @@ public class RecyclerViewFragment extends Fragment {
 
         setRecyclerViewLayoutManager();
 
-        mAdapter = new CustomAdapter(mDataset);
-        // Set CustomAdapter as the adapter for RecyclerView.
+        mAdapter = new RecyclerAdapter();
+        // Set RecyclerAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;

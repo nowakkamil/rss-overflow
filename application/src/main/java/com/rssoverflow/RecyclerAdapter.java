@@ -1,5 +1,6 @@
-package com.example.android.recyclerview;
+package com.rssoverflow;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
@@ -9,15 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.common.converters.LocalDateTimeConverter;
-import com.example.android.common.logger.Log;
-import com.example.android.common.models.Entry;
+import com.rssoverflow.common.converters.LocalDateTimeConverter;
+import com.rssoverflow.common.logger.Log;
+import com.rssoverflow.common.models.Entry;
+import com.rssoverflow.recyclerview.R;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,8 +30,8 @@ import lombok.Getter;
 /**
  * Provide views to RecyclerView with data from mDataSet.
  */
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
-    private static final String TAG = "CustomAdapter";
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+    private static final String TAG = "RecyclerAdapter";
 
     private List<Entry> mDataSet;
 
@@ -54,12 +58,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         public ViewHolder(View v) {
             super(v);
             // Define click listener for the ViewHolder's View.
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
-                }
-            });
+            v.setOnClickListener(v1 -> Log.d(TAG, "Element " + getAdapterPosition() + " clicked."));
             textViewTitle = (TextView) v.findViewById(R.id.textViewTitle);
             textViewAuthor = (TextView) v.findViewById(R.id.textViewAuthor);
             textViewPublished = (TextView) v.findViewById(R.id.textViewPublished);
@@ -70,16 +69,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     /**
      * Initialize the dataset of the Adapter.
-     *
-     * @param dataSet List<Entry> containing the data to populate views to be used by RecyclerView.
-     */
-    public CustomAdapter(List<Entry> dataSet) {
-        mDataSet = dataSet;
+     **/
+    public RecyclerAdapter() {
+        mDataSet = new ArrayList<>();
     }
 
     /**
      * Create new views (invoked by the layout manager)
      */
+    @NotNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view.
@@ -93,6 +91,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      * Replace the contents of a view (invoked by the layout manager).
      * Get element from dataset at this position and replace the contents of the view
      */
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {

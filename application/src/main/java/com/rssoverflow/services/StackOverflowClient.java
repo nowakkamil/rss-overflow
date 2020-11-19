@@ -1,7 +1,7 @@
-package com.example.android.services;
+package com.rssoverflow.services;
 
-import com.example.android.common.converters.DateConverter;
-import com.example.android.common.models.Feed;
+import com.rssoverflow.common.converters.DateConverter;
+import com.rssoverflow.common.models.Feed;
 import com.tickaroo.tikxml.TikXml;
 import com.tickaroo.tikxml.converter.htmlescape.HtmlEscapeStringConverter;
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory;
